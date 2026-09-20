@@ -287,6 +287,25 @@ body {
   padding: 10px;
 }
 
+/* Shown when the model's confidence is too low to trust — amber/neutral
+   instead of the confident green, so uncertainty visually reads as
+   uncertainty rather than a normal successful result. */
+.result-box.result-uncertain {
+  background: #fdf3d8;
+}
+
+.result-box.result-uncertain .result-label {
+  color: #8a6a1f;
+}
+
+.result-box.result-uncertain .confidence-fill {
+  background: linear-gradient(90deg, #e0a52f, #f0c464);
+}
+
+.result-box.result-uncertain .result-confidence {
+  color: #8a6a1f;
+}
+
 footer {
   text-align: center;
   padding: 20px;

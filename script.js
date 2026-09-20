@@ -3,9 +3,18 @@ const CLASSES = ["Plastic", "Metal"];
 const EPOCHS = 30;
 const VALIDATION_SPLIT = 0.2;
 
+// INTEGRITY GUARDRAIL: this model only ever has two options to choose from,
+// so softmax forces its outputs to sum to 100% even for a photo of neither
+// material — it has no built-in way to say "I don't know." As a practical
+// safety net (not a perfect fix — see the caveat in chat), we refuse to
+// commit to a label when the model's own top confidence is weak, since a
+// near-50/50 split is the model itself signaling it's torn.
+const CONFIDENCE_THRESHOLD = 0.9;
+
 const TIPS = {
   Plastic: "♻️ Rinse it out and pop it in your plastics/recycling bin.",
-  Metal: "🥫 Metal is infinitely recyclable — drop it in the metal recycling bin.",
+  Metal:
+    "🥫 Metal is infinitely recyclable — drop it in the metal recycling bin.",
 };
 
 const plasticImages = [
@@ -210,10 +219,12 @@ async function train() {
     // BUG FIX: the original code evaluated on a random *training* image,
     // which is data leakage — the model had already seen the answer, so
     // that "test" couldn't tell you anything about real accuracy.
-    const valCount = Math.max(1, Math.round(dataset.inputs.length * VALIDATION_SPLIT));
+    const valCount = Math.max(
+      1,
+      Math.round(dataset.inputs.length * VALIDATION_SPLIT),
+    );
     const holdoutStart = dataset.inputs.length - valCount;
-    const holdoutIndex =
-      holdoutStart + Math.floor(Math.random() * valCount);
+    const holdoutIndex = holdoutStart + Math.floor(Math.random() * valCount);
 
     await testModel(model, dataset, holdoutIndex);
 
@@ -323,13 +334,27 @@ classifyBtnEl.addEventListener("click", async () => {
     prediction.dispose();
 
     const predictedIndex = probabilities[0] > probabilities[1] ? 0 : 1;
-    const label = CLASSES[predictedIndex];
-    const confidence = probabilities[predictedIndex] * 100;
+    const confidence = probabilities[predictedIndex];
 
-    resultLabelEl.textContent = label;
-    confidenceFillEl.style.width = `${confidence.toFixed(1)}%`;
-    resultConfidenceEl.textContent = `${confidence.toFixed(1)}% confident`;
-    resultTipEl.textContent = TIPS[label] ?? "";
+    resultBoxEl.classList.remove("result-uncertain");
+    confidenceFillEl.style.width = `${(confidence * 100).toFixed(1)}%`;
+
+    if (confidence < CONFIDENCE_THRESHOLD) {
+      // The model itself is torn between the two options — treat that as
+      // "this probably isn't confidently plastic or metal" rather than
+      // forcing a guess.
+      resultBoxEl.classList.add("result-uncertain");
+      resultLabelEl.textContent = "🤔 Not sure";
+      resultConfidenceEl.textContent = `Only ${(confidence * 100).toFixed(1)}% confident — this may not be plastic or metal at all.`;
+      resultTipEl.textContent =
+        "This model only knows plastic vs. metal, so anything else will confuse it. Try a clearer photo, or one of just plastic/metal waste.";
+    } else {
+      const label = CLASSES[predictedIndex];
+      resultLabelEl.textContent = label;
+      resultConfidenceEl.textContent = `${(confidence * 100).toFixed(1)}% confident`;
+      resultTipEl.textContent = TIPS[label] ?? "";
+    }
+
     resultBoxEl.hidden = false;
   } catch (err) {
     console.error(err);
