@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>EcoSort AI — Model Trainer (Private)</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+
+  <body>
+    <div class="bg-leaves" aria-hidden="true"></div>
+
+    <header class="hero">
+      <div class="hero-badge">🔒 PRIVATE TRAINING STUDIO</div>
+      <h1>EcoSort <span>Trainer</span></h1>
+      <p class="tagline">
+        Train the 3-class waste classification model locally on your dataset
+        and export the weights for deployment.
+      </p>
+    </header>
+
+    <main class="container">
+      <section class="card" id="trainingCard" style="grid-column: 1 / -1">
+        <div class="card-header">
+          <span class="card-icon">🌱</span>
+          <h2>Local Training &amp; Export</h2>
+        </div>
+
+        <p class="card-sub">
+          Precomputing MobileNetV2 features and fitting regularized classification head.
+        </p>
+
+        <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat">
+            <span class="stat-label">Epoch</span>
+            <span class="stat-value" id="epochStat">0 / 0</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Loss</span>
+            <span class="stat-value" id="lossStat">—</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Accuracy</span>
+            <span class="stat-value" id="accStat">—</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Val. Accuracy</span>
+            <span class="stat-value" id="valAccStat">—</span>
+          </div>
+        </div>
+
+        <p id="trainingStatus" class="status-text">Initializing training pipeline…</p>
+
+        <div style="margin-top: 24px; text-align: center;">
+          <button id="exportBtn" class="btn" disabled style="max-width: 320px;">
+            💾 Export Trained Model
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <!-- TensorFlow.js Bundled -->
+    <script src="/tf.min.js" type="text/javascript"></script>
+
+    <!-- Private Trainer Script -->
+    <script type="module" src="/train.js"></script>
+  </body>
+</html>

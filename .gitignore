@@ -1,0 +1,11 @@
+# Ignore private training dataset
+dataset/
+
+# Node / IDE / OS temporary files
+node_modules/
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+.artifacts/
+problems.txt

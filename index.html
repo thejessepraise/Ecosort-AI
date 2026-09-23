@@ -17,46 +17,22 @@
       <div class="hero-badge">♻️ AI FOR THE PLANET</div>
       <h1>EcoSort <span>AI</span></h1>
       <p class="tagline">
-        A Convolutional Neural Network that learns to tell plastic from
-        metal — trained right here in your browser.
+        A Convolutional Neural Network that instantly sorts plastic, metal, and other waste — running right here in your browser.
       </p>
     </header>
 
     <main class="container">
-      <section class="card" id="trainingCard">
+      <section class="card" id="statusCard">
         <div class="card-header">
           <span class="card-icon">🌱</span>
-          <h2>Training the Model</h2>
+          <h2>AI Model Status</h2>
         </div>
 
         <p class="card-sub">
-          The CNN is studying sample images of plastic and metal waste.
+          Powered by MobileNetV2 feature extraction and a regularized classification head.
         </p>
 
-        <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-          <div class="progress-fill" id="progressFill"></div>
-        </div>
-
-        <div class="stats-row">
-          <div class="stat">
-            <span class="stat-label">Epoch</span>
-            <span class="stat-value" id="epochStat">0 / 0</span>
-          </div>
-          <div class="stat">
-            <span class="stat-label">Loss</span>
-            <span class="stat-value" id="lossStat">—</span>
-          </div>
-          <div class="stat">
-            <span class="stat-label">Accuracy</span>
-            <span class="stat-value" id="accStat">—</span>
-          </div>
-          <div class="stat">
-            <span class="stat-label">Val. Accuracy</span>
-            <span class="stat-value" id="valAccStat">—</span>
-          </div>
-        </div>
-
-        <p id="trainingStatus" class="status-text">Loading dataset…</p>
+        <p id="trainingStatus" class="status-text">Loading pretrained AI model…</p>
       </section>
 
       <section class="card" id="predictCard">
@@ -95,16 +71,14 @@
 
     <footer>
       <p>
-        Demo model trained on a small local sample set — accuracy will
-        improve with more training images. Built with TensorFlow.js.
+        EcoSort AI runs locally in your browser using TensorFlow.js. Zero server upload required.
       </p>
     </footer>
 
-    <!-- TensorFlow.js (bundled locally so it works without internet access
-         or when CDNs like jsdelivr are blocked by a network/firewall) -->
+    <!-- TensorFlow.js Bundled -->
     <script src="/tf.min.js" type="text/javascript"></script>
 
-    <!-- Our JavaScript -->
+    <!-- Public Inference Engine -->
     <script type="module" src="/script.js"></script>
   </body>
 </html>

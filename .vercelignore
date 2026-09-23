@@ -1,0 +1,9 @@
+# Vercel Deployment Ignore File
+# Keep training dataset and private trainer local/private
+dataset/
+train.html
+train.js
+.git/
+.idea/
+.artifacts/
+problems.txt
