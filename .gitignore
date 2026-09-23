@@ -1,5 +1,7 @@
 # Ignore private training dataset
 dataset/
+train.html
+train.js
 
 # Node / IDE / OS temporary files
 node_modules/
